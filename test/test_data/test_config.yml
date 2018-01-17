@@ -1,0 +1,25 @@
+General:
+  roi: POLYGON ((-8 39, -4 39, -4 35, -8 35, -8 39))
+  start_time: 2017-09-04
+  end_time: 2017-10-04
+  time_interval: 1 # given in days
+  spatial_resolution : 10 # given in meters
+  state_mask: '/path/to/my/state_mask.tif' # Or shape?
+  output_directory_root: /some/where/
+
+Data_Access:
+
+
+High_Res_Pre_Processing:
+
+
+SAR_Pre_Processing:
+  input_folder: './test/test_data/'
+  output_folder: './test/test_data/'
+  gpt_path: './no/path/available/'
+  year: 2017
+
+Prior_Engine:
+
+
+Inference_Engine:
