@@ -4,6 +4,7 @@ from multiply_core.util import AttributeDict
 from multiply_data_access import DataAccessComponent
 import multiply_high_res_pre_processing
 from sar_pre_processing import SARPreProcessor
+import multiply_prior_engine as prior_engine
 
 class Orchestrator(object):
 
@@ -18,6 +19,7 @@ class Orchestrator(object):
         # sar_pre_processor.pre_process_step1()
         # sar_pre_processor.pre_process_step2()
         # sar_pre_processor.pre_process_step3()
+        prior_engine.get_mean_state_vector()
 
 
 
