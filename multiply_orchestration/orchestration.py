@@ -2,8 +2,8 @@ import sys
 import yaml
 from multiply_core.util import AttributeDict
 from multiply_data_access import DataAccessComponent
-import multiply_high_res_pre_processing
-from sar_pre_processing import SARPreProcessor
+# import multiply_high_res_pre_processing
+# from sar_pre_processing import SARPreProcessor
 import multiply_prior_engine as prior_engine
 
 class Orchestrator(object):
