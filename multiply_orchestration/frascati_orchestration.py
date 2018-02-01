@@ -21,16 +21,20 @@ class Orchestrator(object):
         :return:
         """
 
-        config = Orchestrator._get_config()
+        data_access_component = DataAccessComponent()
+        data_access_component.read_data_stores(dir + '/frascati_data_stores.yml')
+        priors_sm_dir = data_access_component.get_data_urls('', '', '', 'SoilMoisture')
+        priors_veg_dir = data_access_component.get_data_urls('', '', '', 'Vegetation')
+
+        config = Orchestrator._get_config(priors_sm_dir=priors_sm_dir, priors_veg_dir=priors_veg_dir)
         config_file_name = dir + '/config.yml'
         yaml.dump(config, open(config_file_name, 'w+'))
         config_as_dict = AttributeDict(**config)
 
-        roi = config_as_dict['General']['roi']
-        start_time_as_string = config_as_dict['General']['start_time']
-        end_time_as_string = config_as_dict['General']['end_time']
-        data_access_component = DataAccessComponent()
-        mcd43_urls = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string, 'MCD43')
+        # roi = config_as_dict['General']['roi']
+        # start_time_as_string = config_as_dict['General']['start_time']
+        # end_time_as_string = config_as_dict['General']['end_time']
+        # mcd43_urls = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string, 'MCD43')
 
         # todo get SAR pre-processed data
         # todo get MODIS data
@@ -71,7 +75,7 @@ class Orchestrator(object):
             current_time += timedelta(weeks=time_interval)
 
     @staticmethod
-    def _get_config() -> dict:
+    def _get_config(priors_sm_dir: str, priors_veg_dir: str) -> dict:
         config = {}
         config['General'] = Orchestrator._get_general_config()
         config['Inference'] = Orchestrator._get_inference_config()
@@ -124,12 +128,12 @@ class Orchestrator(object):
         return inference_dict
 
     @staticmethod
-    def _get_prior_config() -> dict:
-        general_prior_directory = './aux_data/Static/Vegetation/'
+    def _get_prior_config(priors_sm_dir: str, priors_veg_dir: str) -> dict:
+        general_prior_directory = priors_veg_dir
         # prior_general_dict = {'directory_data': general_prior_directory}
         prior_general_dict = {}
         prior_general_dict['directory_data'] = general_prior_directory
-        prior_sm_climatology_directory = './aux_data/Climatology/SoilMoisture/'
+        prior_sm_climatology_directory = priors_sm_dir
         # prior_sm_climatology_dict = {'climatology_dir', prior_sm_climatology_directory}
         prior_sm_climatology_dict = {}
         prior_sm_climatology_dict['climatology_dir'] = prior_sm_climatology_directory
