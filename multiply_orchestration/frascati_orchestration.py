@@ -27,10 +27,12 @@ class Orchestrator(object):
 
         data_access_component = DataAccessComponent()
         data_access_component.read_data_stores(dir + '/frascati_data_stores.yml')
+        # data_access_component.read_data_stores(
+        #     'C:/Users/tonio/Projekte/multiply/workshop/frascati-20180205/frascati_data_stores.yml')
         priors_sm_dir = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string,
-                                                            'SoilMoisture')
+                                                            'SoilMoisture')[0]
         priors_veg_dir = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string,
-                                                             'Vegetation')
+                                                             'Vegetation')[0]
 
         config = Orchestrator._get_config(priors_sm_dir=priors_sm_dir, priors_veg_dir=priors_veg_dir, roi=roi,
                                           start_time=start_time_as_string, end_time=end_time_as_string)
@@ -56,14 +58,14 @@ class Orchestrator(object):
             time_string = current_time.strftime("%Y-%m-%d")
             prior_engine = PriorEngine(datestr=time_string, variables=parameters, config=(config_file_name))
             prior_file_dicts.append(prior_engine.get_priors())
-            Orchestrator._increase_time_step(current_time, time_interval, time_interval_unit)
+            current_time = Orchestrator._increase_time_step(current_time, time_interval, time_interval_unit)
 
         # todo get this from DAC
-        emulator = config['Inference']['emulator']
+        # emulator = config['Inference']['emulator']
 
         # todo get optical data from dac
         # todo define grid from optical data
-        path_to_state_mask = config['General']['state_mask']
+        # path_to_state_mask = config['General']['state_mask']
         # todo open state mask
 
 
@@ -77,6 +79,8 @@ class Orchestrator(object):
             current_time += timedelta(days=time_interval)
         elif time_interval_unit is 'weeks':
             current_time += timedelta(weeks=time_interval)
+        return current_time
+
 
     @staticmethod
     def _get_config(priors_sm_dir: str, priors_veg_dir: str, start_time: str, end_time: str, roi: str) -> dict:
