@@ -21,19 +21,23 @@ class Orchestrator(object):
         :return:
         """
 
+        roi = 'POLYGON ((48.0 11.3, 48.2 11.3, 48.1 11.1, 48.0 11.0, 48.0 11.3))'
+        start_time_as_string = '2017-01-01'
+        end_time_as_string = '2017-01-10'
+
         data_access_component = DataAccessComponent()
         data_access_component.read_data_stores(dir + '/frascati_data_stores.yml')
-        priors_sm_dir = data_access_component.get_data_urls('', '', '', 'SoilMoisture')
-        priors_veg_dir = data_access_component.get_data_urls('', '', '', 'Vegetation')
+        priors_sm_dir = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string,
+                                                            'SoilMoisture')
+        priors_veg_dir = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string,
+                                                             'Vegetation')
 
-        config = Orchestrator._get_config(priors_sm_dir=priors_sm_dir, priors_veg_dir=priors_veg_dir)
+        config = Orchestrator._get_config(priors_sm_dir=priors_sm_dir, priors_veg_dir=priors_veg_dir, roi=roi,
+                                          start_time=start_time_as_string, end_time=end_time_as_string)
         config_file_name = dir + '/config.yml'
         yaml.dump(config, open(config_file_name, 'w+'))
         config_as_dict = AttributeDict(**config)
 
-        # roi = config_as_dict['General']['roi']
-        # start_time_as_string = config_as_dict['General']['start_time']
-        # end_time_as_string = config_as_dict['General']['end_time']
         # mcd43_urls = data_access_component.get_data_urls(roi, start_time_as_string, end_time_as_string, 'MCD43')
 
         # todo get SAR pre-processed data
@@ -75,21 +79,17 @@ class Orchestrator(object):
             current_time += timedelta(weeks=time_interval)
 
     @staticmethod
-    def _get_config(priors_sm_dir: str, priors_veg_dir: str) -> dict:
+    def _get_config(priors_sm_dir: str, priors_veg_dir: str, start_time: str, end_time: str, roi: str) -> dict:
         config = {}
-        config['General'] = Orchestrator._get_general_config()
+        config['General'] = Orchestrator._get_general_config(start_time=start_time, end_time=end_time, roi=roi)
         config['Inference'] = Orchestrator._get_inference_config()
-        config['Prior'] = Orchestrator._get_prior_config()
+        config['Prior'] = Orchestrator._get_prior_config(priors_sm_dir=priors_sm_dir, priors_veg_dir=priors_veg_dir)
         return config
 
     @staticmethod
-    def _get_general_config() -> dict:
-        roi_as_polygon = geometry.Polygon([(48.0, 11.3), (48.2, 11.300), (48.1, 11.1), (48.0, 11), (48.0, 11.3)])
-        roi_as_wkt = wkt.dumps(roi_as_polygon)
-        start_time = datetime(2017, 1, 1)
-        start_time_as_string = start_time.strftime("%Y-%m-%d")
-        end_time = datetime(2017, 1, 10)
-        end_time_as_string = end_time.strftime("%Y-%m-%d")
+    def _get_general_config(start_time: str, end_time: str, roi: str) -> dict:
+        start_time_as_string = start_time
+        end_time_as_string = end_time
         time_interval = 1
         time_interval_unit = 'days'
         spatial_resolution_x = 10
@@ -99,7 +99,7 @@ class Orchestrator(object):
         path_to_state_mask = '/path/to/my/state_mask.tif'
         output_directory_root = '/some/where/'
         general_dict = {}
-        general_dict['roi'] = roi_as_wkt
+        general_dict['roi'] = roi
         general_dict['start_time'] = start_time_as_string
         general_dict['end_time'] = end_time_as_string
         general_dict['time_interval'] = time_interval
@@ -130,19 +130,15 @@ class Orchestrator(object):
     @staticmethod
     def _get_prior_config(priors_sm_dir: str, priors_veg_dir: str) -> dict:
         general_prior_directory = priors_veg_dir
-        # prior_general_dict = {'directory_data': general_prior_directory}
         prior_general_dict = {}
         prior_general_dict['directory_data'] = general_prior_directory
         prior_sm_climatology_directory = priors_sm_dir
-        # prior_sm_climatology_dict = {'climatology_dir', prior_sm_climatology_directory}
         prior_sm_climatology_dict = {}
         prior_sm_climatology_dict['climatology_dir'] = prior_sm_climatology_directory
         prior_sm_dict = {}
         prior_sm_dict['climatology'] = prior_sm_climatology_dict
-        # prior_lai_dict = {'database', None}
         prior_lai_dict = {}
         prior_lai_dict['database'] = None
-        # prior_cab_dict = {'database', None}
         prior_cab_dict = {}
         prior_cab_dict['database'] = None
         prior_dict = {}
