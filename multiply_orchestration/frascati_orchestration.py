@@ -84,7 +84,7 @@ class Orchestrator(object):
         roi_as_wkt = wkt.dumps(roi_as_polygon)
         start_time = datetime(2017, 1, 1)
         start_time_as_string = start_time.strftime("%Y-%m-%d")
-        end_time = datetime(2017, 12, 31)
+        end_time = datetime(2017, 1, 10)
         end_time_as_string = end_time.strftime("%Y-%m-%d")
         time_interval = 1
         time_interval_unit = 'days'
