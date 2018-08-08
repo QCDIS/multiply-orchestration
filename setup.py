@@ -15,10 +15,5 @@ setup(name='multiply-orchestration',
       description='MULTIPLY Orchestration',
       author='Tonio Fincke (Brockmann Consult GmbH)',
       packages=['multiply_orchestration'],
-      # entry_points={
-      #     'console_scripts': [
-      #         'example = cli_example.cli_example:main'
-      #     ]
-      # }
       install_requires=requirements
 )
