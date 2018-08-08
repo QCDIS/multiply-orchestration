@@ -12,7 +12,7 @@ def test_create_sym_link_single_file():
     file_ref = FileRef('./test/test_data/ASTGTM2_N36W006_dem.tif', None, None, 'image/tiff')
     expected_sym_link_name = os.path.join(_FOLDER, 'ASTGTM2_N36W006_dem.tif')
     try:
-        assert 0 == len(os.listdir(_FOLDER))
+        assert not os.path.exists(_FOLDER)
 
         create_sym_link(file_ref, _FOLDER)
 
@@ -23,13 +23,15 @@ def test_create_sym_link_single_file():
     finally:
         if os.path.islink('./test/test_data/out/ASTGTM2_N36W006_dem.tif'):
             os.unlink('./test/test_data/out/ASTGTM2_N36W006_dem.tif')
+        if os.path.exists(_FOLDER):
+            shutil.rmtree(_FOLDER)
 
 
 def test_create_sym_link_s2_aws_data():
     file_ref = FileRef('./test/test_data/29/S/QB/2017/9/4/0/', None, None, 'application/x-directory')
     expected_sym_link_name = os.path.join(_FOLDER, '29/S/QB/2017/9/4/0/')
     try:
-        assert 0 == len(os.listdir(_FOLDER))
+        assert not os.path.exists(_FOLDER)
 
         create_sym_link(file_ref, _FOLDER)
 
@@ -67,7 +69,7 @@ def test_create_sym_link_s2_aws_data():
         assert os.path.islink('./test/test_data/out/29/S/QB/2017/9/4/0/qi/some_file')
     finally:
         if os.path.exists('./test/test_data/out/29/S/QB/2017/9/4/0/'):
-            shutil.rmtree('./test/test_data/out/29/')
+            shutil.rmtree('./test/test_data/out/')
 
 
 def test_create_symlinks_ASTER():
@@ -77,7 +79,7 @@ def test_create_symlinks_ASTER():
     expected_sym_link_name_1 = os.path.join(_FOLDER, 'ASTGTM2_N36W006_dem.tif')
     expected_sym_link_name_2 = os.path.join(_FOLDER, 'ASTGTM2_N36W006_dem.tif')
     try:
-        assert 0 == len(os.listdir(_FOLDER))
+        assert not os.path.exists(_FOLDER)
 
         create_sym_links(file_refs, _FOLDER)
 
@@ -92,6 +94,8 @@ def test_create_symlinks_ASTER():
             os.unlink('./test/test_data/out/ASTGTM2_N36W006_dem.tif')
         if os.path.islink('./test/test_data/out/ASTGTM2_N36W007_dem.tif'):
             os.unlink('./test/test_data/out/ASTGTM2_N36W007_dem.tif')
+        if os.path.exists(_FOLDER):
+            shutil.rmtree(_FOLDER)
 
 
 def test_create_symlinks_ASTER_type_given():
@@ -101,7 +105,7 @@ def test_create_symlinks_ASTER_type_given():
     expected_sym_link_name_1 = os.path.join(_FOLDER, 'ASTGTM2_N36W006_dem.tif')
     expected_sym_link_name_2 = os.path.join(_FOLDER, 'ASTGTM2_N36W006_dem.tif')
     try:
-        assert 0 == len(os.listdir(_FOLDER))
+        assert not os.path.exists(_FOLDER)
 
         create_sym_links(file_refs, _FOLDER, 'ASTER')
 
@@ -116,6 +120,8 @@ def test_create_symlinks_ASTER_type_given():
             os.unlink('./test/test_data/out/ASTGTM2_N36W006_dem.tif')
         if os.path.islink('./test/test_data/out/ASTGTM2_N36W007_dem.tif'):
             os.unlink('./test/test_data/out/ASTGTM2_N36W007_dem.tif')
+        if os.path.exists(_FOLDER):
+            shutil.rmtree(_FOLDER)
 
 
 def test_create_symlinks_s2_aws_data_type_given():
@@ -123,7 +129,7 @@ def test_create_symlinks_s2_aws_data_type_given():
                  FileRef('./test/test_data/30/T/XZ/2016/2/2/1/', None, None, 'application/x-directory')]
     expected_sym_links = [os.path.join(_FOLDER, '29/S/QB/2017/9/4/0/'), os.path.join(_FOLDER, '30/T/XZ/2016/2/2/1/')]
     try:
-        assert 0 == len(os.listdir(_FOLDER))
+        assert not os.path.exists(_FOLDER)
 
         create_sym_links(file_refs, _FOLDER, 'AWS_S2_L1C')
         for expected_sym_link in expected_sym_links:
@@ -160,7 +166,5 @@ def test_create_symlinks_s2_aws_data_type_given():
             assert 'qi' in new_list
             assert os.path.islink('{}/qi/some_file'.format(expected_sym_link))
     finally:
-        if os.path.exists('./test/test_data/out/29/S/QB/2017/9/4/0/'):
-            shutil.rmtree('./test/test_data/out/29/')
-        if os.path.exists('./test/test_data/out/30/T/XZ/2016/2/2/1/'):
-            shutil.rmtree('./test/test_data/out/30/')
+        if os.path.exists(_FOLDER):
+            shutil.rmtree(_FOLDER)

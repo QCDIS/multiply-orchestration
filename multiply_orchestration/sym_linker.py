@@ -22,6 +22,8 @@ def create_sym_link(file_ref: FileRef, folder: str, data_type: Optional[str] = N
     :param folder: The folder into which the data shall be placed.
     :param data_type: The data type of the file ref. Will be determined if not given.
     """
+    if not os.path.exists(folder):
+        os.makedirs(folder)
     if data_type is None:
         data_type = get_valid_type(file_ref.url)
     relative_path = get_data_type_path(data_type, file_ref.url)
