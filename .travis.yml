@@ -41,6 +41,8 @@ install:
   #
   # now install the MULTIPLY components (could be replaced at a later stage with alternative installation methods)
   - pip install https://github.com/multiply-org/multiply-core/zipball/master
+  - pip install sentinelhub
+  - sentinelhub.config --aws_base_url "https://roda.sentinel-hub.com/sentinel-s2-l1c/"
   - pip install https://github.com/multiply-org/data-access/zipball/master
   - pip install https://github.com/multiply-org/prior-engine/zipball/master
   - python setup.py install
