@@ -50,7 +50,7 @@ def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optio
         os.symlink(file_ref, new_file)
 
 
-def create_sym_links(file_refs: List[FileRef], folder: str, data_type: Optional[str] = None):
+def create_sym_links(file_refs: List[Union[str, FileRef]], folder: str, data_type: Optional[str] = None):
     """
     Puts symbolic links to the files referenced by the fileref object into the designated folder. Only supported for
     linux.
@@ -62,6 +62,9 @@ def create_sym_links(file_refs: List[FileRef], folder: str, data_type: Optional[
     if len(file_refs) == 0:
         return
     if data_type is None:
-        data_type = get_valid_type(file_refs[0].url)
+        file_ref = file_refs[0]
+        if type(file_ref) is FileRef:
+            file_ref = file_ref.url
+        data_type = get_valid_type(file_ref)
     for file_ref in file_refs:
         create_sym_link(file_ref, folder, data_type)
