@@ -5,7 +5,7 @@ Description
 This module containes functionality to create symbolic links. This is only supported for unix-based systems.
 """
 
-from typing import List, Sequence, Optional
+from typing import List, Optional, Union
 from multiply_core.observations import get_data_type_path, get_valid_type
 from multiply_core.util import FileRef
 import glob
@@ -14,29 +14,31 @@ import os
 __author__ = 'Tonio Fincke (Brockmann Consult GmbH)'
 
 
-def create_sym_link(file_ref: FileRef, folder: str, data_type: Optional[str] = None):
+def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optional[str] = None):
     """
     Puts a symbolic link to the file referenced by the fileref object into the designated folder. Only supported for
     linux.
-    :param file_ref: A file to be referenced from another folder.
+    :param file_ref: A file to be referenced from another folder. Might either come as a file ref or a url.
     :param folder: The folder into which the data shall be placed.
     :param data_type: The data type of the file ref. Will be determined if not given.
     """
+    if type(file_ref) == FileRef:
+        file_ref = file_ref.url
     if not os.path.exists(folder):
         os.makedirs(folder)
     if data_type is None:
-        data_type = get_valid_type(file_ref.url)
-    relative_path = get_data_type_path(data_type, file_ref.url)
-    file_name = file_ref.url.split('/')[-1]
+        data_type = get_valid_type(file_ref)
+    relative_path = get_data_type_path(data_type, file_ref)
+    file_name = file_ref.split('/')[-1]
     new_file = os.path.join(folder, relative_path, file_name)
-    if os.path.isdir(file_ref.url):
+    if os.path.isdir(file_ref):
         # new_file is folder, too
         os.makedirs(new_file)
-        globbed_files = glob.glob('{}**'.format(file_ref.url), recursive=True)
+        globbed_files = glob.glob('{}**'.format(file_ref), recursive=True)
         for file in globbed_files:
             if os.path.isdir(file):
                 continue
-            relative_file_name = file.replace(file_ref.url, '')
+            relative_file_name = file.replace(file_ref, '')
             split_relative_file_name = relative_file_name.split('/')
             if len(split_relative_file_name) > 1:
                 new_sub_dir = os.path.join(new_file, '/'.join(split_relative_file_name[:-1]))
@@ -45,7 +47,7 @@ def create_sym_link(file_ref: FileRef, folder: str, data_type: Optional[str] = N
             new_sub_file = os.path.join(new_file, relative_file_name)
             os.symlink(file, new_sub_file)
     else:
-        os.symlink(file_ref.url, new_file)
+        os.symlink(file_ref, new_file)
 
 
 def create_sym_links(file_refs: List[FileRef], folder: str, data_type: Optional[str] = None):
