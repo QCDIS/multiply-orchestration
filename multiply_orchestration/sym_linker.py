@@ -46,8 +46,12 @@ def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optio
                 if not os.path.exists(new_sub_dir):
                     os.makedirs(new_sub_dir)
             new_sub_file = os.path.join(new_file, relative_file_name)
+            if os.path.exists(new_sub_file):
+                os.remove(new_sub_file)
             os.symlink(file, new_sub_file)
     else:
+        if os.path.exists(new_file):
+            os.remove(new_file)
         os.symlink(file_ref, new_file)
 
 
