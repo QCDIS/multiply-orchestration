@@ -35,7 +35,7 @@ def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optio
         # new_file is folder, too
         if not os.path.exists(new_file):
             os.makedirs(new_file)
-        globbed_files = glob.glob('{}**'.format(file_ref), recursive=True)
+        globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
         for file in globbed_files:
             if os.path.isdir(file):
                 continue
