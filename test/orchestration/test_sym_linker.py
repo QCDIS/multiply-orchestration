@@ -28,7 +28,7 @@ def test_create_sym_link_single_file():
 
 
 def test_create_sym_link_s2_aws_data():
-    file_ref = FileRef('./test/test_data/29/S/QB/2017/9/4/0/', None, None, 'application/x-directory')
+    file_ref = FileRef('./test/test_data/29/S/QB/2017/9/4/0', None, None, 'application/x-directory')
     expected_sym_link_name = os.path.join(_FOLDER, '29/S/QB/2017/9/4/0/')
     try:
         assert not os.path.exists(_FOLDER)
@@ -125,7 +125,7 @@ def test_create_symlinks_ASTER_type_given():
 
 
 def test_create_symlinks_s2_aws_data_type_given():
-    file_refs = [FileRef('./test/test_data/29/S/QB/2017/9/4/0/', None, None, 'application/x-directory'),
+    file_refs = [FileRef('./test/test_data/29/S/QB/2017/9/4/0', None, None, 'application/x-directory'),
                  FileRef('./test/test_data/30/T/XZ/2016/2/2/1/', None, None, 'application/x-directory')]
     expected_sym_links = [os.path.join(_FOLDER, '29/S/QB/2017/9/4/0/'), os.path.join(_FOLDER, '30/T/XZ/2016/2/2/1/')]
     try:

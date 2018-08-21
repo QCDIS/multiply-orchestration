@@ -29,10 +29,9 @@ def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optio
     if data_type is None:
         data_type = get_valid_type(file_ref)
     relative_path = get_data_type_path(data_type, file_ref)
-    file_name = file_ref.split('/')[-1]
-    new_file = os.path.join(folder, relative_path, file_name)
     if os.path.isdir(file_ref):
         # new_file is folder, too
+        new_file = os.path.join(folder, relative_path)
         if not os.path.exists(new_file):
             os.makedirs(new_file)
         globbed_files = glob.glob('{}/**'.format(file_ref), recursive=True)
@@ -40,6 +39,8 @@ def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optio
             if os.path.isdir(file):
                 continue
             relative_file_name = file.replace(file_ref, '')
+            if relative_file_name.startswith('/'):
+                relative_file_name = relative_file_name[1:]
             split_relative_file_name = relative_file_name.split('/')
             if len(split_relative_file_name) > 1:
                 new_sub_dir = os.path.join(new_file, '/'.join(split_relative_file_name[:-1]))
@@ -50,6 +51,8 @@ def create_sym_link(file_ref: Union[str, FileRef], folder: str, data_type: Optio
                 os.remove(new_sub_file)
             os.symlink(file, new_sub_file)
     else:
+        file_name = file_ref.split('/')[-1]
+        new_file = os.path.join(folder, relative_path, file_name)
         if os.path.exists(new_file):
             os.remove(new_file)
         os.symlink(file_ref, new_file)
