@@ -11,7 +11,7 @@ requirements = [
 ]
 
 __version__ = None
-with open('multiply_core/version.py') as f:
+with open('multiply_orchestration/version.py') as f:
     exec(f.read())
 
 setup(name='multiply-orchestration',
