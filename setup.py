@@ -10,8 +10,12 @@ requirements = [
     'shapely'
 ]
 
+__version__ = None
+with open('multiply_core/version.py') as f:
+    exec(f.read())
+
 setup(name='multiply-orchestration',
-      version='0.1.dev1',
+      version=__version__,
       description='MULTIPLY Orchestration',
       author='Tonio Fincke (Brockmann Consult GmbH)',
       packages=['multiply_orchestration'],
