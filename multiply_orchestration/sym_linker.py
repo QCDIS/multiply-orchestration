@@ -2,7 +2,7 @@
 Description
 ===========
 
-This module containes functionality to create symbolic links. This is only supported for unix-based systems.
+This module contains functionality to create symbolic links. This is only supported for unix-based systems.
 """
 
 from typing import List, Optional, Union
