@@ -12,7 +12,7 @@ class Orchestrator(object):
     def orchestrate(cls, path_to_config: str) -> None:
         assert path_to_config is not None, 'ERROR: Configuration file needs to be provided'
         with open(path_to_config, 'r') as config_file:
-            yaml_config = yaml.load(config_file)
+            yaml_config = yaml.safe_load(config_file)
             config = AttributeDict(**yaml_config)
         data_access_component = DataAccessComponent()
         # sar_pre_processor = SARPreProcessor()
