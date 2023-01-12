@@ -3,9 +3,9 @@
 from setuptools import setup
 
 requirements = [
-    'multiply_data_access @ https://github.com/QCDIS/data-access.git',
-    'multiply_prior_engine @ https://github.com/QCDIS/prior-engine.git',
-    'multiply_core @ https://github.com/QCDIS/multiply-core.git',
+    'multiply_data_access',
+    'multiply_prior_engine',
+    'multiply_core',
     'pyyaml',
     'shapely'
 ]
