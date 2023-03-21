@@ -1,0 +1,28 @@
+name: multiply-KaFKA-inference-engine
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=>3.8
+  - pyproj
+  - sentinelhub
+  - pyyaml
+  - numpy
+  - scipy
+  - setuptools
+  - matplotlib
+  - pyyaml
+  - setuptools
+  - pytest
+  - flake8
+  - scipy
+  - shapely
+  - pytest-shutil
+  - pip
+  - pip:
+      - .
+      - git+https://github.com/QCDIS/data-access.git
+      - git+https://github.com/QCDIS/prior-engine.git
+      - git+https://github.com/QCDIS/multiply-core.git

@@ -3,11 +3,6 @@
 from setuptools import setup
 
 requirements = [
-    'multiply_data_access',
-    'multiply_prior_engine',
-    'multiply_core',
-    'pyyaml',
-    'shapely'
 ]
 
 __version__ = None
